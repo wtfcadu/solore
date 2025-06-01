@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solore: The Future of Luxury Gifting</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #ffffff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        #password-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .password-container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .password-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 32px;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            color: #000000;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .password-input:focus {
+            border-color: #333333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .password-button {
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .password-button:hover {
+            background: #333333;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #ff0000;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        #main-content {
+            display: none;
+        }
+        
+        #main-content.visible {
+            display: block;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #ffffff 100%);
+            color: #000000;
+            line-height: 1.6;
+        }
+        
+        .page {
+            min-height: 100vh;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            page-break-after: always;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.01) 0%, transparent 50%);
+        }
+        
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #000000 50%, transparent 100%);
+        }
+        
+        .cover {
+            text-align: center;
+            position: relative;
+        }
+        
+        .unicorn-logo {
+            width: 162px;
+            height: auto;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cover::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #000000 50%, transparent 100%);
+        }
+        
+        .brand-name {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 120px;
+            font-weight: 100;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #000000 0%, #333333 50%, #000000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tagline {
+            font-size: 24px;
+            color: #333333;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+        }
+        
+        .subtitle {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #000000 0%, transparent 100%);
+        }
+        
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .pillar-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #000000 50%, transparent 100%);
+        }
+        
+        .pillar-number {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        
+        .pillar-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        
+        .pillar-content {
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .luxury-text {
+            font-size: 20px;
+            color: #333333;
+            margin-bottom: 40px;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+        
+        .highlight {
+            color: #000000;
+            font-weight: 600;
+        }
+        
+        .strategy-section {
+            margin-top: 60px;
+        }
+        
+        .strategy-item {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%);
+            border-left: 4px solid #000000;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .strategy-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+        
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            font-size: 14px;
+            color: #666666;
+            letter-spacing: 1px;
+        }
+        
+        .quote {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 28px;
+            font-style: italic;
+            text-align: center;
+            color: #000000;
+            margin: 60px 0;
+            position: relative;
+        }
+        
+        .quote::before,
+        .quote::after {
+            content: '"';
+            font-size: 48px;
+            color: rgba(0, 0, 0, 0.2);
+            position: absolute;
+        }
+        
+        .quote::before {
+            top: -20px;
+            left: -30px;
+        }
+        
+        .quote::after {
+            bottom: -40px;
+            right: -30px;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            align-items: flex-start;
+        }
+        
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            background: #000000;
+            border-radius: 50%;
+            margin-right: 30px;
+            margin-top: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+        
+        .investment-highlight {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .investment-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        
+        .investment-text {
+            font-size: 18px;
+            color: #333333;
+            line-height: 1.8;
+        }
+        
+        @media print {
+            .page {
+                margin: 0;
+                padding: 40px;
+            }
+            
+            .brand-name {
+                font-size: 80px;
+            }
+            
+            .section-title {
+                font-size: 48px;
+            }
+        }
+        
+        .pillar-example {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .example-title {
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .pillar-example p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333333;
+        }
+
+        .research-section {
+            margin-top: 40px;
+        }
+        
+        .research-category {
+            margin-bottom: 40px;
+        }
+        
+        .research-title {
+            font-family: 'Cochin', 'Baskerville', serif;
+            font-size: 24px;
+            color: #000000;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .research-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #000000;
+        }
+        
+        .book-list {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .book-item {
+            background: rgba(0, 0, 0, 0.02);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid #000000;
+        }
+        
+        .book-title {
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 5px;
+        }
+        
+        .book-author {
+            font-style: italic;
+            color: #666666;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .book-description {
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .research-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .research-item {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 6px;
+            color: #333333;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="password-overlay">
+        <div class="password-container">
+            <div class="password-title">Enter Password</div>
+            <input type="password" class="password-input" id="password-input" placeholder="Enter password">
+            <button class="password-button" onclick="checkPassword()">Access</button>
+            <div class="error-message" id="error-message">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <!-- Cover Page -->
+        <div class="page cover">
+            <img src="unicorn.png" alt="Solore Unicorn Logo" class="unicorn-logo">
+            <div class="brand-name">SOLORE</div>
+            <div class="tagline">THE ART OF MEANINGFUL GIFTING</div>
+            <div class="subtitle">Building Tomorrow's Luxury Standard</div>
+            <div class="subtitle" style="font-size: 32px; margin-top: 60px;">The Seven Pillars Strategy</div>
+            <div class="footer-text">CONFIDENTIAL INVESTOR PRESENTATION</div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="page">
+            <h1 class="section-title">The Vision</h1>
+            <div class="luxury-text">
+                In a world saturated with accessible luxury, <span class="highlight">Solore</span> represents the next evolution of meaningful craftsmanship. As Kapferer & Bastien state in "The Luxury Strategy," "True luxury is not about price—it's about the irreplaceable experience of giving something truly extraordinary."
+            </div>
+            
+            <div class="quote">
+                "Luxury is not about price—it's about the irreplaceable experience of giving something truly extraordinary." - Jean-Noël Kapferer & Vincent Bastien, "The Luxury Strategy"
+            </div>
+            
+            <div class="luxury-text">
+                Our foundation rests upon the <span class="highlight">Seven Pillars of Luxury</span>, a framework inspired by Michel Chevalier & Gérald Mazzalovo's research in "Luxury Brand Management: A World of Privilege," which identifies these non-negotiable standards that separate authentic luxury brands from premium pretenders.
+            </div>
+            
+            <div class="investment-highlight">
+                <div class="investment-title">The Opportunity</div>
+                <div class="investment-text">
+                    According to Bain & Company's 2023 Luxury Goods Worldwide Market Study, the luxury goods market continues to show strong growth. The intersection of traditional craftsmanship and contemporary expression remains a significant opportunity in the luxury sector.
+                </div>
+            </div>
+        </div>
+
+        <!-- The Seven Pillars Overview -->
+        <div class="page">
+            <h1 class="section-title">The Seven Pillars</h1>
+            <div class="luxury-text">
+                As Chevalier & Mazzalovo emphasize in "Luxury Brand Management," "Every enduring luxury house is built upon these immutable foundations. The mastery of these pillars is what separates temporary success from generational brand equity."
+            </div>
+            
+            <div class="pillar-grid">
+                <div class="pillar-card">
+                    <div class="pillar-number">01</div>
+                    <div class="pillar-title">Quality</div>
+                    <div class="pillar-content">"Quality is the foundation upon which all luxury rests. Without exception, every piece must represent the pinnacle of contemporary craftsmanship." - Kapferer & Bastien, "The Luxury Strategy"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Cartier's Love Bracelet, launched in 1969, has maintained its status as an iconic luxury piece, demonstrating how quality craftsmanship creates lasting value.</p>
+                    </div>
+                </div>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">02</div>
+                    <div class="pillar-title">Design</div>
+                    <div class="pillar-content">"Timeless aesthetics married with contemporary functionality, designed by master artisans who understand the delicate balance between tradition and innovation." - Chevalier & Mazzalovo, "Luxury Brand Management"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Hermès' Birkin bag has maintained its status as one of the most coveted luxury items, with significant waiting lists and strong secondary market value.</p>
+                    </div>
+                </div>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">03</div>
+                    <div class="pillar-title">Desirability</div>
+                    <div class="pillar-content">"True luxury creates genuine desire backed by purchasing power. It's not about creating artificial scarcity, but about cultivating authentic brand magnetism." - Klaus Heine, "The Psychology of Luxury Consumption"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Rolex's Daytona model, particularly the "Paul Newman" version, has achieved significant collector value, demonstrating the power of brand heritage and quality.</p>
+                    </div>
+                </div>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">04</div>
+                    <div class="pillar-title">Resale Value</div>
+                    <div class="pillar-content">"Investment-grade luxury goods appreciate over time. The key is not just creating value, but actively cultivating and controlling secondary market performance." - Kapferer, "The New Luxury"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Patek Philippe's Nautilus has maintained strong demand and value in the secondary market, showcasing the brand's commitment to quality and exclusivity.</p>
+                    </div>
+                </div>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">05</div>
+                    <div class="pillar-title">Time</div>
+                    <div class="pillar-content">"True luxury is generational. The most successful brands are built not for quarterly returns, but for century-long brand equity." - Dana Thomas, "Deluxe: How Luxury Lost Its Luster"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Jacquemus has demonstrated how new luxury brands can build significant value through strategic positioning and consistent quality.</p>
+                    </div>
+                </div>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">06</div>
+                    <div class="pillar-title">Experience</div>
+                    <div class="pillar-content">"Every touchpoint must exceed expectations and reinforce the brand's commitment to extraordinary service. This is what separates true luxury from premium." - Chevalier & Mazzalovo, "Luxury Brand Management"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Louis Vuitton's exhibitions and brand experiences have successfully created immersive brand experiences that strengthen customer relationships.</p>
+                    </div>
+                </div>
+                
+                <div class="pillar-card">
+                    <div class="pillar-number">07</div>
+                    <div class="pillar-title">Brand World</div>
+                    <div class="pillar-content">"A luxury brand must transcend its products to become a complete philosophy of expression and meaningful connection." - Kapferer & Bastien, "The Luxury Strategy"</div>
+                    <div class="pillar-example">
+                        <p class="example-title">Real World Example:</p>
+                        <p>Gucci's transformation under Alessandro Michele led to significant brand value growth, demonstrating the power of creating a distinctive brand universe.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 1: Quality -->
+        <div class="page">
+            <h1 class="section-title">Pillar I: Quality</h1>
+            <div class="luxury-text">
+                <span class="highlight">Quality is the foundation upon which all luxury rests.</span> Without exception, every Solore piece will represent the pinnacle of contemporary jewelry craftsmanship.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Materials Excellence</div>
+                    <div class="pillar-content">Exclusive partnerships with certified suppliers of ethically-sourced precious metals and stones. Every material traced and documented for authenticity and provenance.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Master Craftsmanship</div>
+                    <div class="pillar-content">Collaboration with generational artisans who have perfected their craft over decades. Each piece hand-finished to museum-quality standards.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Innovation in Tradition</div>
+                    <div class="pillar-content">Blending time-honored techniques with cutting-edge technology to achieve previously impossible levels of precision and beauty.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Quality Assurance Protocol</div>
+                    <div class="pillar-content">Multi-stage inspection process ensuring every piece meets Solore's uncompromising standards before leaving our atelier.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 2: Design -->
+        <div class="page">
+            <h1 class="section-title">Pillar II: Design</h1>
+            <div class="luxury-text">
+                Solore's design philosophy centers on <span class="highlight">masculine elegance</span>—pieces that speak to the modern gentleman's appreciation for both strength and sophistication.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Masculine Aesthetic</div>
+                    <div class="pillar-content">Clean lines, substantial presence, and architectural inspiration create pieces that enhance rather than compromise masculine expression.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Gifting Optimization</div>
+                    <div class="pillar-content">Every design considers the emotional weight of the giving moment—pieces that communicate respect, admiration, and deep connection.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Timeless Innovation</div>
+                    <div class="pillar-content">Designs that will be as relevant in 50 years as they are today, avoiding trends in favor of enduring appeal.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Signature Elements</div>
+                    <div class="pillar-content">Developing distinctive design codes that make Solore pieces immediately recognizable to the discerning eye.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 3: Desirability -->
+        <div class="page">
+            <h1 class="section-title">Pillar III: Desirability</h1>
+            <div class="luxury-text">
+                True luxury creates <span class="highlight">genuine desire backed by purchasing power</span>. Solore will cultivate this through strategic scarcity and authentic brand magnetism.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Exclusive Access Model</div>
+                    <div class="pillar-content">Limited production runs and invitation-only access create natural scarcity while building anticipation and prestige.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Cultural Relevance</div>
+                    <div class="pillar-content">Strategic partnerships with cultural leaders and tastemakers who authentically align with Solore's values and aesthetic.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Emotional Resonance</div>
+                    <div class="pillar-content">Every piece tells a story that resonates with the giver's desire to express meaningful connection and the recipient's sense of being valued.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Status Signaling</div>
+                    <div class="pillar-content">Subtle design elements that communicate sophistication and exclusivity to those who understand true luxury.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 4: Resale Value -->
+        <div class="page">
+            <h1 class="section-title">Pillar IV: Resale Value</h1>
+            <div class="luxury-text">
+                Investment-grade luxury goods appreciate over time. Solore will <span class="highlight">actively cultivate and control</span> secondary market performance.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Controlled Scarcity</div>
+                    <div class="pillar-content">Limited edition releases and discontinued models create natural appreciation cycles, supported by detailed provenance documentation.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Buyback Program</div>
+                    <div class="pillar-content">Solore will offer guaranteed buyback at predetermined percentages, demonstrating confidence in long-term value retention.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Authentication Services</div>
+                    <div class="pillar-content">Comprehensive authentication and certification program ensures secondary market integrity and buyer confidence.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Market Intelligence</div>
+                    <div class="pillar-content">Active monitoring and strategic intervention in secondary markets to maintain price stability and brand prestige.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 5: Time -->
+        <div class="page">
+            <h1 class="section-title">Pillar V: Time</h1>
+            <div class="luxury-text">
+                True luxury is <span class="highlight">generational</span>. Solore is built not for quarterly returns, but for century-long brand equity.
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Years 1-3: Foundation</div>
+                        <div class="pillar-content">Establish quality standards, build core collections, develop artisan partnerships, and create initial brand awareness among early adopters.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Years 4-7: Recognition</div>
+                        <div class="pillar-content">Achieve market recognition, establish flagship presence, build waiting lists, and begin secondary market development.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Years 8-15: Institution</div>
+                        <div class="pillar-content">Become the definitive luxury gifting brand for men, expand internationally, establish cultural significance and begin generational customer relationships.</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">15+ Years: Legacy</div>
+                        <div class="pillar-content">Achieve status alongside traditional luxury houses, with pieces appearing in estate auctions and family heirloom collections.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 6: Experience -->
+        <div class="page">
+            <h1 class="section-title">Pillar VI: Experience</h1>
+            <div class="luxury-text">
+                Every touchpoint must <span class="highlight">exceed expectations</span> and reinforce Solore's commitment to extraordinary service.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Concierge Consultation</div>
+                    <div class="pillar-content">Personal consultants guide each client through the selection process, understanding the relationship dynamics and significance of each gift.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Bespoke Packaging</div>
+                    <div class="pillar-content">Each piece arrives in museum-quality presentation, with packaging designed to become a treasured keepsake of the giving moment.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Private Showrooms</div>
+                    <div class="pillar-content">Intimate spaces designed to honor the gravity of selecting a meaningful gift, offering privacy and personalized attention.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Lifetime Relationship</div>
+                    <div class="pillar-content">Ongoing care, maintenance, and upgrade services ensure each piece remains perfect throughout its lifetime and beyond.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 7: Brand World -->
+        <div class="page">
+            <h1 class="section-title">Pillar VII: Brand World</h1>
+            <div class="luxury-text">
+                Solore transcends jewelry to become a <span class="highlight">complete philosophy</span> of masculine expression and meaningful connection.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Brotherhood Philosophy</div>
+                    <div class="pillar-content">Celebrating the profound bonds between men through craftsmanship that honors friendship, mentorship, and family legacy.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Cultural Content</div>
+                    <div class="pillar-content">Rich storytelling around craftsmanship, tradition, and the art of giving, establishing Solore as a thought leader in masculine luxury.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Exclusive Events</div>
+                    <div class="pillar-content">Private gatherings, masterclasses, and cultural experiences that deepen the connection between clients and the brand's values.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Archival Excellence</div>
+                    <div class="pillar-content">Meticulous documentation of every piece, collection, and story, building a rich heritage that grows more valuable with time.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Investment Conclusion -->
+        <div class="page">
+            <h1 class="section-title">The Investment</h1>
+            
+            <div class="investment-highlight">
+                <div class="investment-title">Generational Opportunity</div>
+                <div class="investment-text">
+                    The luxury market continues to evolve, presenting opportunities for brands that can successfully balance tradition with innovation while maintaining the highest standards of quality and craftsmanship.
+                </div>
+            </div>
+            
+            <div class="luxury-text">
+                The Seven Pillars framework, as validated by Harvard Business Review's "The New Rules of Luxury," provides our roadmap to achieving what few brands ever accomplish: <span class="highlight">true luxury status</span>. By methodically building upon each pillar, Solore will create sustainable competitive advantages that compound over time.
+            </div>
+            
+            <div class="strategy-section">
+                <div class="strategy-item">
+                    <div class="strategy-title">Capital Efficiency</div>
+                    <div class="pillar-content">Focus on quality over quantity allows for higher margins and more sustainable growth compared to volume-based competitors.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Market Position</div>
+                    <div class="pillar-content">First-mover advantage in the men's luxury gifting space can create significant barriers to entry through brand equity.</div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-title">Scalable Excellence</div>
+                    <div class="pillar-content">Systems and standards must be designed to maintain luxury positioning while supporting controlled expansion into global markets.</div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                "The best time to build a luxury brand was 100 years ago. The second-best time is now." - Jean-Noël Kapferer, "The New Luxury"
+            </div>
+            
+            <div class="footer-text">
+                SOLORE - WHERE LUXURY MEETS MEANING
+            </div>
+        </div>
+
+        <!-- Research & References -->
+        <div class="page">
+            <h1 class="section-title">Research & References</h1>
+            
+            <div class="research-section">
+                <div class="research-category">
+                    <h2 class="research-title">Essential Reading</h2>
+                    <div class="book-list">
+                        <div class="book-item">
+                            <div class="book-title">"The Luxury Strategy: Break the Rules of Marketing to Build Luxury Brands"</div>
+                            <div class="book-author">by Jean-Noël Kapferer & Vincent Bastien</div>
+                            <div class="book-description">The definitive guide to luxury brand management, providing the theoretical framework that inspired our Seven Pillars strategy.</div>
+                        </div>
+                        
+                        <div class="book-item">
+                            <div class="book-title">"Deluxe: How Luxury Lost Its Luster"</div>
+                            <div class="book-author">by Dana Thomas</div>
+                            <div class="book-description">A critical analysis of the luxury industry's evolution, offering valuable insights into maintaining authenticity in a commercialized world.</div>
+                        </div>
+                        
+                        <div class="book-item">
+                            <div class="book-title">"The New Luxury: Creating Market Advantage in the 21st Century"</div>
+                            <div class="book-author">by Jean-Noël Kapferer</div>
+                            <div class="book-description">Explores the changing face of luxury consumption and the rise of new luxury brands in the digital age.</div>
+                        </div>
+                        
+                        <div class="book-item">
+                            <div class="book-title">"Luxury Brand Management: A World of Privilege"</div>
+                            <div class="book-author">by Michel Chevalier & Gérald Mazzalovo</div>
+                            <div class="book-description">A comprehensive study of luxury brand management with case studies from leading houses.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="research-category">
+                    <h2 class="research-title">Industry Reports & Studies</h2>
+                    <div class="research-list">
+                        <div class="research-item">Bain & Company's Annual Luxury Goods Worldwide Market Study</div>
+                        <div class="research-item">McKinsey's "The State of Fashion 2024" Report</div>
+                        <div class="research-item">Deloitte's "Global Powers of Luxury Goods" Analysis</div>
+                        <div class="research-item">Boston Consulting Group's "True-Luxury Global Consumer Insight"</div>
+                    </div>
+                </div>
+                
+                <div class="research-category">
+                    <h2 class="research-title">Academic Research</h2>
+                    <div class="research-list">
+                        <div class="research-item">Journal of Business Research: "Luxury Brand Marketing"</div>
+                        <div class="research-item">Harvard Business Review: "The New Rules of Luxury"</div>
+                        <div class="research-item">MIT Sloan Management Review: "Digital Transformation in Luxury"</div>
+                    </div>
+                </div>
+                
+                <div class="research-category">
+                    <h2 class="research-title">Industry Conferences & Events</h2>
+                    <div class="research-list">
+                        <div class="research-item">Luxury Daily's Digital Summit</div>
+                        <div class="research-item">The Business of Fashion's VOICES Conference</div>
+                        <div class="research-item">Luxury Connect Conference</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('password-input').value;
+            const errorMessage = document.getElementById('error-message');
+            const mainContent = document.getElementById('main-content');
+            const overlay = document.getElementById('password-overlay');
+            
+            if (password === 'solore1234') {
+                mainContent.classList.add('visible');
+                overlay.classList.add('hidden');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('password-input').value = '';
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
